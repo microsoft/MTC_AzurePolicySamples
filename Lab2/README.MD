@@ -57,7 +57,7 @@ You will see a visualization that shows Azure Policy with options to select/filt
 14. It's beyond the scope of this workshop to discuss how the queries were edited to get into a meaningful form so the data could be visualized.  Take time to go through each step in `Applied Steps` (top-down) and see what happened to the resulting data.  You can do the same for the AllPolicySetDefintions data source
 15. Once you're done reviewing the queries, select `Close & Apply` from the top right and you'll be returned to the Power BI visualizations
 
-`If you're asking why so many manual steps are needed, you're asking a good question.  In the labs so far, you are using client tools to create queries, save data, adjust Power BI queries, etc.  This can all be automated which will be covered in Lab 3.  It's important you understand how the pieceparts fit together at the basic level.`
+`If you're asking why so many manual steps are needed, you're asking a good question.  In the labs so far, you are using client tools to create queries, save data, adjust Power BI queries, etc.  This can all be automated, but it's important you understand how the pieceparts fit together at the basic level.  At a later date, automation samples will be included in this repo.`
 
 ### Visualize Azure Policy
 1. From Power BI, on the right side you will see 'AllPolicyDefintions' and 'AllPolicySetDefintions'.  In the tabs below the visualization, you'll see three tabs named: Instructions, All Policies, and All Policy Sets

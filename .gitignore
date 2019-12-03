@@ -19,6 +19,8 @@ Scripts/
 # Do not synch local copies of data from queries
 Data/*.json
 
+# Do not synch the RBAC visualization for now
+PowerBI/Azure RBAC Visualization.pbix
 
 # User-specific files
 *.suo
