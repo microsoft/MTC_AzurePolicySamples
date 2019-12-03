@@ -3,6 +3,23 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Python virtual environment
+.venv/
+
+# Visual Studio Code
+.vscode/
+
+# Exclude Code and Scripts for now
+Code/
+Scripts/
+
+# VS code workspace
+*.code-workspace
+
+# Do not synch local copies of data from queries
+Data/*.json
+
+
 # User-specific files
 *.suo
 *.user

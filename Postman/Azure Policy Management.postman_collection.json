@@ -1,0 +1,690 @@
+{
+	"info": {
+		"_postman_id": "cd7c78d8-2339-4476-b7f9-3de9d19f025f",
+		"name": "Azure Policy Management",
+		"description": "These examples show how to access the Azure Policy Management functions via the REST APIs. To do this, it's required to have a Service Principal/App Registration granted READER permission to the scope of your API calls.\n\nFor example, if you are working with a subscription MYSUBS, then you must assign READER role to MYSUBS for your service principal.  This can be done either in the portal or via the CLI.\n\nThere are several variables set for this collection.  You can create a Postman Environment named \"Azure Policy Environment\" where you can add the following keys/values:\n\nClientID\n<the app reg ID>\n\nClientSecret\n<the secret for the app reg ID>\n\nTenantID\n<the ID of the Azure AD tenant>\n\nAccessToken\n<leave blank.  Will be automatically updated when you retrieve a Bearer token>\n\nSubscriptionId\n<Azure subscription ID>\n\nRequestId\n<leave blank>\n\nAuthorizationAPIVersion\n<set to the current Microsoft.Authorization API version>\n\nPolicyInsightsAPIVersionPolicyInsightsAPIVersion\n<set to the current Microsoft.PolicyInsights API version>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Bearer Token - Azure Service Common",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b79fc628-ecc3-4afa-a6cd-081947079a15",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"pm.environment.set(\"AccessToken\", data.access_token)",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{ClientID}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{ClientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "https://management.azure.com/",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://graph.microsoft.com/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{TenantID}}",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Policy Definitions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AccessToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/providers/Microsoft.Authorization/policyDefinitions?api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"providers",
+						"Microsoft.Authorization",
+						"policyDefinitions"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Policy Set Definitions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "632ee5e6-1ff3-4a19-a164-8cefbad9c591",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{AccessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/providers/Microsoft.Authorization/policySetDefinitions?api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"providers",
+						"Microsoft.Authorization",
+						"policySetDefinitions"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Policy Insight Operations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AccessToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/providers/Microsoft.PolicyInsights/operations?api-version={{PolicyInsightsAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"providers",
+						"Microsoft.PolicyInsights",
+						"operations"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{PolicyInsightsAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Policy Definitions by Subscription Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AccessToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.Authorization/policyDefinitions?api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.Authorization",
+						"policyDefinitions"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Azure Policy Assignments by Subscription",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AccessToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.Authorization/policyAssignments?$filter=atScope()&api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.Authorization",
+						"policyAssignments"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "atScope()"
+						},
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Custom Policy Set Definitions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "632ee5e6-1ff3-4a19-a164-8cefbad9c591",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{AccessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.Authorization/policySetDefinitions?$filter=policyType eq 'custom'&api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.Authorization",
+						"policySetDefinitions"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "policyType eq 'custom'"
+						},
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All Policy Set Definitions by Subscription",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "632ee5e6-1ff3-4a19-a164-8cefbad9c591",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{AccessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.Authorization/policySetDefinitions?$filter=policyType eq 'custom'&api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.Authorization",
+						"policySetDefinitions"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "policyType eq 'custom'"
+						},
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Policy Set Definition by Name",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{AccessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.Authorization/policySetDefinitions/{policyname - GUID not displayName}?api-version={{AuthorizationAPIVersion}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.Authorization",
+						"policySetDefinitions",
+						"{policyname - GUID not displayName}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{AuthorizationAPIVersion}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Policy Tracked Resources by Subscription",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AccessToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.PolicyInsights/policyTrackedResources/default/queryResults?api-version=2018-07-01-preview",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.PolicyInsights",
+						"policyTrackedResources",
+						"default",
+						"queryResults"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2018-07-01-preview"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Trigger Policy Evaluation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{SubscriptionID}}/providers/Microsoft.PolicyInsights/policyStates/latest/triggerEvaluation?api-version=2018-07-01-preview",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{SubscriptionID}}",
+						"providers",
+						"Microsoft.PolicyInsights",
+						"policyStates",
+						"latest",
+						"triggerEvaluation"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2018-07-01-preview"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{AccessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2ad8abd3-6042-4737-8fd5-5d38a7748b27",
+				"type": "text/javascript",
+				"exec": [
+					"const ONE_HOUR = 3600",
+					"const expiration = parseInt(pm.environment.get('AccessExpiration'))",
+					"const now = (new Date().getTime()) / 1000",
+					"",
+					"const getJWTToken = (tenantName, rerource, spId, spKey) => {",
+					"    const echoPostRequest = { ",
+					"      method: 'POST',",
+					"      url: `https://login.microsoftonline.com/${tenantName}/oauth2/token`,",
+					"      headers: ",
+					"      { ",
+					"        'cache-control': 'no-cache',",
+					"        'Content-Type': 'application/x-www-form-urlencoded' ",
+					"      },",
+					"      body: ",
+					"      {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: ",
+					"        [",
+					"            { key: \"resource\", value: rerource, disabled: false},",
+					"            { key: \"client_id\", value: spId, disabled: false},",
+					"            { key: \"client_secret\", value: spKey, disabled :false},",
+					"            { key: \"grant_type\", value: \"client_credentials\", disabled: false}",
+					"        ]",
+					"      }",
+					"    };",
+					"    ",
+					"     pm.sendRequest(echoPostRequest, (err, res) => {",
+					"        if (err) {",
+					"            throw new Error(err);",
+					"        }",
+					"        ",
+					"        const response = res.json()",
+					"        ",
+					"        if (!response.access_token) {",
+					"            throw new Error(response.error_description);",
+					"        }",
+					"        ",
+					"        pm.environment.set('AccessToken', response.access_token);",
+					"        pm.environment.set('AccessExpiration', response.expires_on);",
+					"        console.log('Successfully set the token');",
+					"    });",
+					"}",
+					"",
+					"function uuidv4() {",
+					"  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
+					"    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
+					"    return v.toString(16);",
+					"  });",
+					"}",
+					"",
+					"",
+					"// Get the token does not exists or the life of it is less than 10 minutes fetch a new token",
+					"if (!pm.environment.get('AccessToken') || !expiration || ((expiration - now) < ONE_HOUR))",
+					"{",
+					"    ",
+					"    getJWTToken(pm.environment.get('TenantID'), pm.environment.get('MgmtResource'), pm.environment.get('ClientID'), pm.environment.get('ClientSecret'));",
+					"}",
+					"",
+					"",
+					"pm.environment.set('RequestId',  uuidv4());",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b8713091-0cd2-40d8-8917-4602ce9a8e7a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
