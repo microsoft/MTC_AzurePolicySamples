@@ -208,6 +208,8 @@ What about the actual REST API calls and what they are used for?  This is a good
 - [Azure Policy Insights REST APIs](https://docs.microsoft.com/en-us/rest/api/policy-insights/)
 - [Azure Policy Definition Structure](https://docs.microsoft.com/en-us/azure/governance/policy/concepts/definition-structure) 
 - [Understanding OID Connect and OAuth flows](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-protocols-openid-connect-code)
+- [Azure Policy extension for Visual Studio Code](https://docs.microsoft.com/en-us/azure/governance/policy/how-to/extension-for-vscode)
+- [Tutorial: Create a custom policy definition](https://docs.microsoft.com/en-us/azure/governance/policy/tutorials/create-custom-policy-definition)
 
 
 # Contributing
