@@ -31,5 +31,6 @@ PowerBI/Azure RBAC Visualization.pbix
 *.userosscache
 *.sln.docstates
 *.vars
+prod.env
 
 
