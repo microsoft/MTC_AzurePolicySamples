@@ -3,11 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Python virtual environment
+# Python virtual environment and environment files
 .venv/
 .38env/
 envvars.py
 _pycache_/
+*.env
 
 # Visual Studio Code
 .vscode/
@@ -31,6 +32,6 @@ PowerBI/Azure RBAC Visualization.pbix
 *.userosscache
 *.sln.docstates
 *.vars
-prod.env
+
 
 
