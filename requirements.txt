@@ -27,7 +27,7 @@ multidict==5.1.0
 numpy==1.20.2
 oauthlib==3.1.0
 pandas==1.2.4
-pipenv==2021.5.29
+pipenv==2022.1.8
 platformdirs==2.2.0
 portalocker==1.7.1
 pycparser==2.20
